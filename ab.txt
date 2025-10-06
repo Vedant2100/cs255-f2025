@@ -1,0 +1,50 @@
+080483e4 <main>:
+80483e4: 55                 pushl   %ebp            # save current function's base pointer
+80483e5: 89 e5              movl    %esp, %ebp      # set up a new base pointer for this function
+80483e7: 83 ec 18           subl    $0x18, %esp     # reserve 24 bytes on stack for local variables
+80483ea: 83 e4 f0           andl    $-0x10, %esp    # align stack to 16 bytes for performance
+80483ed: b8 00 00 00 00     movl    $0x0, %eax      # clear register eax (initialize to 0)
+80483f2: 83 c0 0f           addl    $0xf, %eax      # eax += 15
+80483f5: 83 c0 0f           addl    $0xf, %eax      # eax += 15 again
+80483f8: c1 e8 04           shrl    $0x4, %eax      # divide eax by 16
+80483fb: c1 e0 04           shll    $0x4, %eax      # multiply eax by 16
+80483fe: 29 c4              subl    %eax, %esp      # adjust stack pointer for aligned local space
+
+8048400: c7 04 24 48 85 04 08  movl $0x8048548, (%esp)  # push address of header string for printf
+8048407: e8 10 ff ff ff           calll 0x804831c <printf@plt>  # call printf(header)
+
+804840c: c7 04 24 61 85 04 08  movl $0x8048561, (%esp)  # push address of prompt string for printf
+8048413: e8 04 ff ff ff           calll 0x804831c <printf@plt>  # call printf(prompt)
+
+8048418: 8d 45 fc           leal   -0x4(%ebp), %eax       # get address of local input variable
+804841b: 89 44 24 04        movl   %eax, 0x4(%esp)        # place input address as 2nd argument for scanf
+804841f: c7 04 24 6c 85 04 08  movl $0x804856c, (%esp)  # push format string ("%d") for scanf
+8048426: e8 e1 fe ff ff        calll 0x804830c <scanf@plt>  # call scanf("%d", &input)
+
+804842b: c7 45 f8 5a 00 00 00   movl $0x5a, -0x8(%ebp)       # store 90 in tmp1
+8048432: c7 45 f4 ec 01 00 00   movl $0x1ec, -0xc(%ebp)      # store 492 in tmp2
+
+8048439: 8b 55 f4           movl -0xc(%ebp), %edx          # load tmp2 into edx
+804843c: 8d 45 f8           leal -0x8(%ebp), %eax          # load address of tmp1 into eax
+804843f: 01 10              addl %edx, (%eax)              # tmp1 += tmp2 → tmp1 = 582
+
+8048441: 8b 45 f8           movl -0x8(%ebp), %eax          # load tmp1 (582) into eax
+8048444: 0f af 45 f8        imull -0x8(%ebp), %eax         # multiply eax by tmp1 → eax = 582*582
+8048448: 89 45 f4           movl %eax, -0xc(%ebp)          # store result back in tmp2 → tmp2 = 338724
+
+804844b: 8b 45 fc           movl -0x4(%ebp), %eax          # load user input into eax
+804844e: 3b 45 f4           cmpl -0xc(%ebp), %eax          # compare input with tmp2 (338724)
+8048451: 75 0e              jne 0x8048461                  # if not equal, jump to failure
+
+8048453: c7 04 24 6f 85 04 08  movl $0x804856f, (%esp)   # push success message address
+804845a: e8 bd fe ff ff           calll 0x804831c <printf@plt>  # printf("Password OK :)")
+804845f: eb 0c                      jmp 0x804846d               # skip failure message
+
+8048461: c7 04 24 7f 85 04 08  movl $0x804857f, (%esp)   # push failure message address
+8048468: e8 af fe ff ff           calll 0x804831c <printf@plt>  # printf("Invalid Password!")
+
+804846d: b8 00 00 00 00        movl $0x0, %eax                # set return value = 0
+8048472: c9                    leave                            # clean up stack, restore old base pointer
+8048473: c3                    retl                             # return from main
+
+8048474-804847e: 90                 nop                             # do nothing, padding/alignment

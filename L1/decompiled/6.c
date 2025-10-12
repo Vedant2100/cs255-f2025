@@ -7,7 +7,7 @@ undefined4 main(undefined4 param_1,undefined4 param_2,undefined4 param_3)
   printf("IOLI Crackme Level 0x06\n");
   printf("Password: ");
   scanf("%s",local_7c);
-  check(local_7c,param_3);
+  check(local_7c,param_3); // where is param_3 coming from? - probably garbage value
   return 0;
 }
 
@@ -37,19 +37,41 @@ void check(char *param_1,undefined4 param_2)
   return;
 }
 undefined4 dummy(undefined4 param_1,int param_2)
-
+// checks if "LOLO" is in the array of strings pointed to by param_2
 {
   int iVar1;
   int local_8;
   
   local_8 = 0;
-  do {
-    if (*(int *)(local_8 * 4 + param_2) == 0) {
-      return 0;
+
+  // loop through array of strings until we find "LOLO" or hit a null pointer
+  do { // infinite loop until return
+    if (*(int *)(local_8 * 4 + param_2) == 0) {  // null pointer check
+      return 0; // not found
     }
-    iVar1 = local_8 * 4;
-    local_8 = local_8 + 1;
-    iVar1 = strncmp(*(char **)(iVar1 + param_2),"LOLO",3);
-  } while (iVar1 != 0);
-  return 1;
+    iVar1 = local_8 * 4; // index into array of strings
+    local_8 = local_8 + 1; // increment index
+    iVar1 = strncmp(*(char **)(iVar1 + param_2),"LOLO",3); // compare first 3 chars of string to "LOLO"
+  } while (iVar1 != 0); // if not equal, continue loop
+  return 1; // found
+}
+void parell(char *param_1,undefined4 param_2)
+
+{
+  int iVar1;
+  int local_c;
+  uint local_8;
+  
+  sscanf(param_1,"%d",&local_8); // convert string to integer
+  iVar1 = dummy(local_8,param_2); // check if LOLO is in the array
+  if (iVar1 != 0) {
+    for (local_c = 0; local_c < 10; local_c = local_c + 1) {
+      if ((local_8 & 1) == 0) {
+        printf("Password OK!\n");
+                    /* WARNING: Subroutine does not return */
+        exit(0);
+      }
+    }
+  }
+  return;
 }

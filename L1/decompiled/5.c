@@ -5,7 +5,7 @@ undefined4 main(void)
   undefined1 local_7c [120];
   
   printf("IOLI Crackme Level 0x05\n");
-  printf("Password: ");
+  printf("Password: "); 
   scanf("%s",local_7c);
   check(local_7c);
   return 0;
@@ -36,3 +36,18 @@ void check(char *param_1)
   printf("Password Incorrect!\n");
   return;
 }
+
+void parell(char *param_1)
+
+{
+  uint local_8;
+  
+  sscanf(param_1,"%d",&local_8);
+  if ((local_8 & 1) == 0) { // check if even 
+    printf("Password OK!\n");
+                    /* WARNING: Subroutine does not return */
+    exit(0);
+  }
+  return;
+}
+

@@ -25,18 +25,19 @@ void test(int param_1,int param_2)
 void shift(char *param_1)
 
 {
-  size_t sVar1;
-  uint local_80;
-  char local_7c [120];
+  size_t sVar1; 
+  uint local_80; 
+  char local_7c [120]; 
   
   local_80 = 0;
   while( true ) {
-    sVar1 = strlen(param_1);
-    if (sVar1 <= local_80) break;
-    local_7c[local_80] = param_1[local_80] + -3;
+    sVar1 = strlen(param_1); //length of a string 
+    if (sVar1 <= local_80) break; //if length of string is less than or equal to index, break
+    local_7c[local_80] = param_1[local_80] + -3;  //shift each character by -3
     local_80 = local_80 + 1;
   }
-  local_7c[local_80] = '\0';
-  printf("%s\n",local_7c);
+  // so local_7c is the shifted string 
+  local_7c[local_80] = '\0'; //null terminate the string
+  printf("%s\n",local_7c); 
   return;
 }

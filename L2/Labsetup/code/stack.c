@@ -48,4 +48,3 @@ void dummy_function(char *str)
     memset(dummy_buffer, 0, 1000);
     bof(str);
 }
-
